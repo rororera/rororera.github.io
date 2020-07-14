@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>Spring事务传播方式</title>
+    <link href="/2020/07/02/Spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%96%B9%E5%BC%8F/"/>
+    <url>/2020/07/02/Spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%96%B9%E5%BC%8F/</url>
+    
+    <content type="html"><![CDATA[<h3 id="Spring事务作用"><a href="#Spring事务作用" class="headerlink" title="Spring事务作用"></a>Spring事务作用</h3><p><strong>当我们调用一个基于Spring的Service接口方法时，它将运行于Spring管理的事务环境中，Service接口方法可能会在内部调用其它的Service接口方法以共同完成一个完整的业务操作，因此就会产生服务接口方法嵌套调用的情况， Spring通过事务传播行为控制当前的事务如何传播到被嵌套调用的目标服务接口方法中。</strong></p><h3 id="Spring的事务隔离级别"><a href="#Spring的事务隔离级别" class="headerlink" title="Spring的事务隔离级别"></a>Spring的事务隔离级别</h3><ol><li>ISOLATION_DEFAULT 默认级别<ul><li>由底层数据库决定事务隔离级别</li></ul></li><li>ISOLATION_READ_UNCOMMITED 读未提交</li><li>ISOLATION_COMMITED 读已提交</li><li>ISOLATION_REPEATABLE_READ 可重复读</li><li>ISOLATION_SERIALIZABLE 串行化</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Spring</tag>
+      
+      <tag>事务传播</tag>
+      
+      <tag>事务隔离级别</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>视察中国联合工程公司的讲话</title>
     <link href="/2019/04/12/%E8%A7%86%E5%AF%9F%E4%B8%AD%E5%9B%BD%E8%81%94%E5%90%88%E5%B7%A5%E7%A8%8B%E5%85%AC%E5%8F%B8%E7%9A%84%E8%AE%B2%E8%AF%9D/"/>
     <url>/2019/04/12/%E8%A7%86%E5%AF%9F%E4%B8%AD%E5%9B%BD%E8%81%94%E5%90%88%E5%B7%A5%E7%A8%8B%E5%85%AC%E5%8F%B8%E7%9A%84%E8%AE%B2%E8%AF%9D/</url>
