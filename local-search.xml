@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>Oracle试题3</title>
+    <link href="/2020/07/16/Oracle%E8%AF%95%E9%A2%983/"/>
+    <url>/2020/07/16/Oracle%E8%AF%95%E9%A2%983/</url>
+    
+    <content type="html"><![CDATA[<ol><li><p>查询emp和dept表,产生笛卡尔积(多表行相乘)<br><code>select emp.*,dept.* from emp,dept</code></p></li><li><p>加where条件过滤查询emp和dept表产生的笛卡尔积<br><code>select emp.*,dept.* from emp,dept where emp.deptno = dept.deptno</code></p></li><li><p>查询emp和dept表,产生笛卡尔积(多表行相乘),并为表取别名<br><code>select t1.*,t2.* from emp t1,dept t2</code></p></li><li><p>查询雇员姓名,所在部门编号和名称<br><code>select emp.ename,emp.deptno,dept.dname from emp,dept where emp.deptno = dept.deptno</code></p></li><li><p>查询所有雇员姓名,工作,领导的姓名<br><code>select t1.ename,t1.job,t2.ename from emp t1,emp t2 where t1.mgr = t2.empno(+)</code></p></li><li><p>查询雇员姓名,工作,领导姓名及部门名称<br><code>select t1.ename,t1.job,t2.ename,dname from emp t1,emp t2,dept where t1.mgr = t2.empno(+) and t1.deptno=dept .deptno</code></p></li><li><p>查询雇员姓名,工作,工资及工资等级<br><code>select ename,job,sal,grade from emp,salgrade where sal between losal and hisal</code></p></li><li><p>查询雇员姓名,工作,工资及工资等级,要求工资等级显示为A B C D E<br><code>select ename,job,sal,decode(grade,1,&#39;A&#39;,2,&#39;B&#39;,3,&#39;C&#39;,4,&#39;D&#39;,5,&#39;E&#39;) from emp,salgrade where sal between losal and hisal</code></p></li><li><p>查询雇员姓名,年薪（薪水+奖金）,按年薪从高到低排序<br><code>select ename,(sal+nvl(comm,0))*12 from emp order by nvl((sal+nvl(comm,0))*12,0) desc</code></p></li><li><p>查询每个部门中工资最高的雇员姓名,工作,工资,部门名称,最后按工资从高到低排序，工资相同的情况下按姓名排升序</p><pre><code class="hljs routeros">select ename,job,sal,dname <span class="hljs-keyword">from</span> emp t1,dept t2,(select max(sal) maxsal <span class="hljs-keyword">from</span> emp t1,dept t2 where t1.<span class="hljs-attribute">deptno</span>=t2.deptno<span class="hljs-built_in"> group </span>by t1.deptno ) t3 where t1.<span class="hljs-attribute">deptno</span>=t2.deptno <span class="hljs-keyword">and</span> t1.<span class="hljs-attribute">sal</span>=t3.maxsal order by sal desc,ename</code></pre></li><li><p>查询每个部门的部门编号和雇员数量</p><pre><code class="hljs routeros">select dept.deptno,nvl(emp.empnum,0)<span class="hljs-keyword">from</span> dept,(select count(empno) empnum,deptno <span class="hljs-keyword">from</span> emp<span class="hljs-built_in"> group </span>by deptno) empwhere dept.<span class="hljs-attribute">deptno</span>=emp.deptno(+)</code></pre></li><li><p>出每个部门的部门名和平均工资(保留2位小数，截断)</p><pre><code class="hljs routeros">select dname,nvl(emp.avgsal,0)<span class="hljs-keyword">from</span> dept,(select trunc(avg(sal),2) avgsal,deptno <span class="hljs-keyword">from</span> emp<span class="hljs-built_in"> group </span>by deptno) empwhere dept.<span class="hljs-attribute">deptno</span>=emp.deptno(+)</code></pre></li><li><p>按部门分组，并显示部门的名称，以及每个部门的员工数</p><pre><code class="hljs routeros">select dname,nvl(emp.empnum,0)<span class="hljs-keyword">from</span> dept,(select count(empno) empnum,deptno <span class="hljs-keyword">from</span> emp<span class="hljs-built_in"> group </span>by deptno) empwhere dept.<span class="hljs-attribute">deptno</span>=emp.deptno(+)</code></pre></li><li><p>要求显示平均工资大于2000的部门编号和平均工资(保留2位小数，截断)</p><pre><code class="hljs routeros">select dept.deptno,emp.avgsal<span class="hljs-keyword">from</span> dept,(select trunc(avg(sal),2) avgsal,deptno <span class="hljs-keyword">from</span> emp<span class="hljs-built_in"> group </span>by deptno) empwhere dept.<span class="hljs-attribute">deptno</span>=emp.deptno <span class="hljs-keyword">and</span> emp.avgsal&gt;2000</code></pre></li></ol>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Oracle试题2</title>
     <link href="/2020/07/16/Oracle%E8%AF%95%E9%A2%982/"/>
     <url>/2020/07/16/Oracle%E8%AF%95%E9%A2%982/</url>
