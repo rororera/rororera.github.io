@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="吉光片羽">
   <meta name="keywords" content="">
-  <title>Oracle体系结构 - 吉光片羽</title>
+  <title>Oracle试题1 - 吉光片羽</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -139,7 +139,7 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-07-15 13:42">
+    <time datetime="2020-07-15 16:37">
       July 15, 2020 pm
     </time>
   </div>
@@ -150,7 +150,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      182 字
+      760 字
     </span>
   
 
@@ -160,7 +160,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      2
+      11
        分钟
     </span>
   
@@ -192,31 +192,53 @@
             
             <article class="markdown-body">
               <ol>
-<li><p>系统全局共享区（SGA）<br> 共享内存区域</p>
+<li><p>查询当前用户下的所有表<br><code>select * from user_tables;</code></p>
 </li>
-<li><p>个人用户私有全局区（PGA）</p>
+<li><p>查询雇员表中所有信息<br><code>select empno,ename, job,mgr,hiredate,sal,comm,deptno from emp;</code></p>
 </li>
-<li><p>SQL语句缓冲（Library Cache）**查</p>
+<li><p>查询雇员编号,姓名,工作,工资。<br><code>select empno,ename,job,sal from emp;</code></p>
 </li>
-<li><p>数据字典缓冲区（Data Dictionary Cache）**查</p>
+<li><p>查询雇员编号,姓名,工作,工资,列标题需显示中文。<br><code>select empno &quot;编号&quot;,ename &quot;姓名&quot;, job &quot;工作&quot;,sal &quot;工资&quot; from emp;</code></p>
 </li>
-<li><p>块缓冲区高速缓存（Database Buffer Cache）**增删改</p>
+<li><p>消除重复列,查询雇员工作种类。<br><code>select distinct job from emp;</code></p>
 </li>
-<li><p>重做日志缓冲区</p>
+<li><p>查询所有雇员编号,姓名,工作.按以下格式显示:编号:7369,姓名:SMITH,工作:CLERK<br><code>select &#39;编号:&#39;||empno||&#39;,姓名:&#39;||ename||&#39;,工作:&#39;||job 雇员资料 from emp ;</code></p>
 </li>
 </ol>
-<p>创建用户<br>create user xxx identified by xxx<br>授予权限<br>grant xxx(dba,resource,connect) to xxx<br>收回权限<br>revoke xxx from xxx</p>
-<p>SQL语句运行顺序<br>select        5<br>from        1<br>where        2<br>group by    3<br>having        4<br>order by    6</p>
-<p>insert into table(…) value(…)</p>
-<p>时间表达式</p>
-<p>Oracle:YYYY-MM-DD HH24:MI:SS<br>PG:YYYY-MM-DD HH24:MI:SS<br>MySQL:%Y-%M-%D</p>
-<p>nvl()<br>nvl2()<br>decode()</p>
-<p>chr(65) = A<br>concat(str1,str2,str3,…)<br>initcap()</p>
-<p>to_char()<br>to_number()</p>
-<p>ABS<br>CEIL<br>FLOOR<br>POWER<br>ROUND</p>
-<p>日期、字符串、数字转换<br>日期——》  to_number(to_char(date,’yyyymmdd’))</p>
-<p>nullif(A,B)<br>    A和B相同返回null，否则返回A</p>
-<p>coalesce(…,…,…)<br>返回第一个非空值</p>
+<ol start="7">
+<li><p>查询雇员编号,姓名,工作,年薪<br><code>select empno 编号,ename 姓名,job 工作,(sal+nvl(comm,0))*12  年薪 from emp;</code></p>
+</li>
+<li><p>查询工资大于1500的雇员所有信息<br><code>select empno,ename, job,mgr,hiredate,sal,comm,deptno from emp where sal&gt;1500;</code></p>
+</li>
+<li><p>查询可以得到奖金的雇员所有信息<br><code>select empno,ename, job,mgr,hiredate,sal,comm,deptno from emp where comm is not null and comm &lt;&gt;0;</code></p>
+</li>
+<li><p>查询工资大于1500或可以得到奖金的雇员<br><code>select  empno,ename, job,mgr,hiredate,sal,comm,deptno  from emp where sal&gt;1500 or comm is not null  and comm &lt;&gt;0;</code></p>
+</li>
+<li><p>查询工资大于1500并且可以领取奖金的雇员<br><code>select  empno,ename, job,mgr,hiredate,sal,comm,deptno from emp where sal&gt;1500 and comm is not null and comm &lt;&gt;0;</code></p>
+</li>
+<li><p>查询工资不大于1500或者不可以领取奖金的雇员<br><code>select empno 编号,ename 姓名,job 工作,sal 月薪,comm 奖金,hiredate 雇用日期,deptno 部门编号,mgr 管理者 from emp  where sal&lt;=1500 or comm is null;</code></p>
+</li>
+<li><p>查询工资在1500到3000的所有雇员信息<br><code>select  empno,ename, job,mgr,hiredate,sal,comm,deptno  from emp where sal between 1500 and 3000;</code></p>
+</li>
+<li><p>查询在1981年雇用的员工信息<br><code>select empno 编号,ename 姓名,job 工作,sal 月薪,comm 奖金,hiredate 雇用日期,deptno 部门编号,mgr 管理者 from emp where hiredate between &#39;01-1月 -1981&#39; and &#39;31-12月 -1981&#39;;</code></p>
+</li>
+<li><p>查询雇员姓名中第二个字母为”M”的雇员信息<br><code>select empno,ename, job,mgr,hiredate,sal,comm,deptno from emp where ename like &#39;_M%&#39;;</code></p>
+</li>
+<li><p>查询雇员工资中带8这个数字的<br><code>select empno,ename, job,mgr,hiredate,sal,comm,deptno from emp where sal like &#39;%8%&#39;;</code></p>
+</li>
+<li><p>查询编号是7369,7499,7521,7900的雇员信息<br><code>select empno,ename, job,mgr,hiredate,sal,comm,deptno from emp where empno in (7369,7499,7521,7900);</code></p>
+</li>
+<li><p>查询雇员编号不是7369,7499,7521,7900的所有雇员信息<br><code>select empno,ename, job,mgr,hiredate,sal,comm,deptno from emp where empno not in (7369,7499,7521,7900);</code></p>
+</li>
+<li><p>查询雇员编号为7369的雇员信息<br><code>select empno 编号,ename 姓名,job 工作,sal 月薪,comm 奖金,hiredate 雇用日期,deptno 部门编号,mgr 管理者 from emp  where empno = 7369;</code></p>
+</li>
+<li><p>查询雇员编号不为7369的雇员信息<br><code>select empno,ename, job,mgr,hiredate,sal,comm,deptno from emp where empno &lt;&gt;7369;</code></p>
+</li>
+<li><p>查询雇员信息,按工资由低到高排序<br><code>select empno,ename, job,mgr,hiredate,sal,comm,deptno from emp order by sal asc;</code></p>
+</li>
+<li><p>查询雇员信息,按工资由高到低排序<br><code>select empno,ename, job,mgr,hiredate,sal,comm,deptno from emp order by sal desc;</code></p>
+</li>
+</ol>
 
             </article>
             <hr>
@@ -236,6 +258,10 @@
                     
                       <a class="hover-with-bg" href="/tags/Oracle/">Oracle</a>
                     
+                      <a class="hover-with-bg" href="/tags/%E8%AF%95%E9%A2%98/">试题</a>
+                    
+                      <a class="hover-with-bg" href="/tags/SQL/">SQL</a>
+                    
                   </div>
                 
               </div>
@@ -247,9 +273,9 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/07/15/Oracle%E8%AF%95%E9%A2%981/">
+                      <a href="/2020/07/16/Oracle%E8%AF%95%E9%A2%982/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Oracle试题1</span>
+                        <span class="hidden-mobile">Oracle试题2</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -257,8 +283,8 @@
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/07/02/Spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%96%B9%E5%BC%8F/">
-                        <span class="hidden-mobile">Spring事务传播方式</span>
+                      <a href="/2020/07/15/Oracle%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">
+                        <span class="hidden-mobile">Oracle体系结构</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -404,7 +430,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Oracle体系结构&nbsp;",
+        "Oracle试题1&nbsp;",
       ],
       cursorChar: "|",
       typeSpeed: 80,
