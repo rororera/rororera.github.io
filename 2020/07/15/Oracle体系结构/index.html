@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="吉光片羽">
   <meta name="keywords" content="">
-  <title>Spring事务传播方式 - 吉光片羽</title>
+  <title>Oracle体系结构 - 吉光片羽</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -139,8 +139,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-07-02 19:44">
-      July 2, 2020 pm
+    <time datetime="2020-07-15 13:42">
+      July 15, 2020 pm
     </time>
   </div>
 
@@ -150,7 +150,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      885 字
+      182 字
     </span>
   
 
@@ -160,7 +160,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      9
+      2
        分钟
     </span>
   
@@ -191,78 +191,32 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <h3 id="事务的基本要素"><a href="#事务的基本要素" class="headerlink" title="事务的基本要素"></a>事务的基本要素</h3><ol>
-<li><p>原子性（Atomicity）：事务开始后所有操作，要么全部做完，要么全部不做，不可能停滞在中间环节。事务执行过程中出错，会回滚到事务开始前的状态，所有的操作就像没有发生一样。也就是说事务是一个不可分割的整体，就像化学中学过的原子，是物质构成的基本单位。</p>
+              <ol>
+<li><p>系统全局共享区（SGA）<br> 共享内存区域</p>
 </li>
-<li><p>一致性（Consistency）：事务开始前和结束后，数据库的完整性约束没有被破坏 。比如A向B转账，不可能A扣了钱，B却没收到。</p>
+<li><p>个人用户私有全局区（PGA）</p>
 </li>
-<li><p>隔离性（Isolation）：同一时间，只允许一个事务请求同一数据，不同的事务之间彼此没有任何干扰。比如A正在从一张银行卡中取钱，在A取钱的过程结束前，B不能向这张卡转账。</p>
+<li><p>SQL语句缓冲（Library Cache）**查</p>
 </li>
-<li><p>持久性（Durability）：事务完成后，事务对数据库的所有更新将被保存到数据库，不能回滚。</p>
+<li><p>数据字典缓冲区（Data Dictionary Cache）**查</p>
 </li>
-</ol>
-<h3 id="事务的并发问题"><a href="#事务的并发问题" class="headerlink" title="事务的并发问题"></a>事务的并发问题</h3><ol>
-<li><p>脏读：事务A读取了事务B更新的数据，然后B回滚操作，那么A读取到的数据是脏数据。</p>
+<li><p>块缓冲区高速缓存（Database Buffer Cache）**增删改</p>
 </li>
-<li><p>不可重复读：事务A多次读取同一数据，事务B在事务A多次读取的过程中，对数据作了更新并提交，导致事务A多次读取同一数据时，结果不一致。</p>
-</li>
-<li><p>幻读：事务A在修改一组数据时，事务B新增了一条数据，事务A在确认修改完后发现还有一条数据居然没有修改成功，跟见了鬼一样。</p>
+<li><p>重做日志缓冲区</p>
 </li>
 </ol>
-<p><strong>不可重复读的和幻读很容易混淆，不可重复读侧重于修改，幻读侧重于新增或删除。</strong></p>
-<h3 id="Spring事务作用"><a href="#Spring事务作用" class="headerlink" title="Spring事务作用"></a>Spring事务作用</h3><p><strong>当我们调用一个基于Spring的Service接口方法时，它将运行于Spring管理的事务环境中，Service接口方法可能会在内部调用其它的Service接口方法以共同完成一个完整的业务操作，因此就会产生服务接口方法嵌套调用的情况， Spring通过事务传播行为控制当前的事务如何传播到被嵌套调用的目标服务接口方法中。</strong></p>
-<h3 id="Spring的事务隔离级别"><a href="#Spring的事务隔离级别" class="headerlink" title="Spring的事务隔离级别"></a>Spring的事务隔离级别</h3><ol>
-<li>ISOLATION_DEFAULT 默认级别<ul>
-<li>由底层数据库决定事务隔离级别。</li>
-</ul>
-</li>
-<li>ISOLATION_READ_UNCOMMITED 读未提交 <ul>
-<li>会产生脏读，不可重复读，幻读。</li>
-</ul>
-</li>
-<li>ISOLATION_COMMITED 读已提交 <ul>
-<li>可以避免产生脏读。但还是会产生不可重复读，幻读。</li>
-</ul>
-</li>
-<li>ISOLATION_REPEATABLE_READ 可重复读 <ul>
-<li>可以避免产生脏读，不可重复读。但还是会产生幻读。</li>
-</ul>
-</li>
-<li>ISOLATION_SERIALIZABLE 串行化 <ul>
-<li>完全避免了脏读，不可重复读，幻读。</li>
-</ul>
-</li>
-</ol>
-<h3 id="Spring事务传播行为"><a href="#Spring事务传播行为" class="headerlink" title="Spring事务传播行为"></a>Spring事务传播行为</h3><ol>
-<li>PROPAGATION_REQUIRED<ul>
-<li>如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入到这个事务中。这是最常见的选择。</li>
-</ul>
-</li>
-<li>PROPAGATION_SUPPORTS<ul>
-<li>支持当前事务，如果当前没有事务，就以非事务方式执行。</li>
-</ul>
-</li>
-<li>PROPAGATION_MANDATORY<ul>
-<li>使用当前的事务，如果当前没有事务，就抛出异常。</li>
-</ul>
-</li>
-<li>PROPAGATION_REQUIRES_NEW<ul>
-<li>新建事务，如果当前存在事务，把当前事务挂起。</li>
-</ul>
-</li>
-<li>PROPAGATION_NOT_SUPPORTED<ul>
-<li>以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。</li>
-</ul>
-</li>
-<li>PROPAGATION_NEVER<ul>
-<li>以非事务方式执行，如果当前存在事务，则抛出异常。</li>
-</ul>
-</li>
-<li>PROPAGATION_NESTED<ul>
-<li>如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作。</li>
-</ul>
-</li>
-</ol>
+<p>创建用户<br>create user xxx identified by xxx<br>授予权限<br>grant xxx(dba,resource,connect) to xxx<br>收回权限<br>revoke xxx from xxx</p>
+<p>SQL语句运行顺序<br>select        5<br>from        1<br>where        2<br>group by    3<br>having        4<br>order by    6</p>
+<p>insert into table(…) value(…)</p>
+<p>时间表达式</p>
+<p>Oracle:YYYY-MM-DD HH24:MI:SS<br>PG:YYYY-MM-DD HH24:MI:SS<br>MySQL:%Y-%M-%D</p>
+<p>nvl()<br>nvl2()<br>decode()</p>
+<p>chr(65) = A<br>concat(str1,str2,str3,…)<br>initcap()</p>
+<p>to_char()<br>to_number()</p>
+<p>ABS<br>CEIL<br>FLOOR<br>POWER<br>ROUND</p>
+<p>日期、字符串、数字转换<br>日期——》  to_number(to_char(date,’yyyymmdd’))</p>
+<p>nullif(A,B)<br>    A和B相同返回null，否则返回A</p>
+<p>coalesce(…,…,…)<br>返回第一个非空值</p>
 
             </article>
             <hr>
@@ -280,13 +234,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Spring/">Spring</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD/">事务传播</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/">事务隔离级别</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E4%BA%8B%E5%8A%A1/">事务</a>
+                      <a class="hover-with-bg" href="/tags/Oracle/">Oracle</a>
                     
                   </div>
                 
@@ -299,9 +247,9 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/07/15/Oracle%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">
+                      <a href="/2020/07/16/Oracle%E8%AF%95%E9%A2%982/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Oracle体系结构</span>
+                        <span class="hidden-mobile">Oracle试题2</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -309,8 +257,8 @@
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2019/04/12/%E8%A7%86%E5%AF%9F%E4%B8%AD%E5%9B%BD%E8%81%94%E5%90%88%E5%B7%A5%E7%A8%8B%E5%85%AC%E5%8F%B8%E7%9A%84%E8%AE%B2%E8%AF%9D/">
-                        <span class="hidden-mobile">视察中国联合工程公司的讲话</span>
+                      <a href="/2020/07/02/Spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%96%B9%E5%BC%8F/">
+                        <span class="hidden-mobile">Spring事务传播方式</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -456,7 +404,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Spring事务传播方式&nbsp;",
+        "Oracle体系结构&nbsp;",
       ],
       cursorChar: "|",
       typeSpeed: 80,
