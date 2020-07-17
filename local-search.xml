@@ -5,6 +5,35 @@
   
   <entry>
     <title>Oracle试题3</title>
+    <link href="/2020/07/16/Oracle%E8%AF%95%E9%A2%984/"/>
+    <url>/2020/07/16/Oracle%E8%AF%95%E9%A2%984/</url>
+    
+    <content type="html"><![CDATA[<ol><li><p>显示非销售人员工作名称以及从事同一工作雇员的月工资的总和，并且要满足从事同一工作的雇员的月工资大于$1500，输出结果按月工资的合计升序排列<br><code>select job,sum(sal) from emp where job!=&#39;SALESMAN&#39; group by job having avg(sal)&gt;1500 order by sum(sal)</code></p></li><li><p>求出平均工资最高的部门名称<br><code>select dname from (select avg(sal) s,deptno from emp group by deptno order by avg(sal) desc) t1,dept t2 where rownum=1 and t1.deptno=t2.deptno</code></p></li><li><p>要求查询出比7654工资要高的全部雇员的信息<br><code>select * from emp where sal &gt;(select sal from emp where empno = 7654)</code></p></li><li><p>要求查询工资比7654高，与7788从事相同工作的全部雇员信息<br><code>select * from emp where sal &gt;(select sal from emp where empno = 7654) and job in(select job from emp where empno = 7788)</code></p></li><li><p>查询出工资最低的雇员姓名，工作，工资<br><code>select ename,job,sal from emp where sal=(select min(sal) from emp)</code></p></li><li><p>查询出各部门工资最低的雇员姓名，工作，工资<br><code>select ename,job,sal from emp t1, (select deptno,min(sal) minsal from emp group by deptno ) t2 where t1.deptno=t2.deptno and t1.sal=t2.minsal</code></p></li><li><p>要求查询出部门名称，部门的员工数，部门的平均工资，部门的最低收入雇员姓名，要求显示所有部门名，如果该部门没有任何员工，则员工书和平均工资需显示0，员工姓名显示null即可。</p><pre><code class="hljs routeros">select dname,  nvl(empnum,0),nvl(avgsal,0), nvl(emp.ename,<span class="hljs-literal">null</span>)<span class="hljs-keyword">from</span> emp,dept t1, (select  deptno,avg (nvl(sal,0)) avgsal,min (sal) minsal,count (empno) empnum <span class="hljs-keyword">from</span> emp<span class="hljs-built_in"> group </span>by deptno ) t2where t1.deptno = t2.deptno(+) <span class="hljs-keyword">and</span> emp.sal(+) = t2.minsal</code></pre></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Oracle</tag>
+      
+      <tag>试题</tag>
+      
+      <tag>SQL</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Oracle试题3</title>
     <link href="/2020/07/16/Oracle%E8%AF%95%E9%A2%983/"/>
     <url>/2020/07/16/Oracle%E8%AF%95%E9%A2%983/</url>
     

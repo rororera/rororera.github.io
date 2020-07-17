@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="吉光片羽">
   <meta name="keywords" content="">
-  <title>Oracle试题2 - 吉光片羽</title>
+  <title>Oracle试题3 - 吉光片羽</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -139,8 +139,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-07-16 11:42">
-      July 16, 2020 am
+    <time datetime="2020-07-16 18:24">
+      July 16, 2020 pm
     </time>
   </div>
 
@@ -150,7 +150,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      805 字
+      402 字
     </span>
   
 
@@ -160,7 +160,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      11
+      5
        分钟
     </span>
   
@@ -192,54 +192,22 @@
             
             <article class="markdown-body">
               <ol>
-<li><p>查询部门30中的所有员工信息<br><code>select * from emp where deptno = 30</code></p>
+<li><p>显示非销售人员工作名称以及从事同一工作雇员的月工资的总和，并且要满足从事同一工作的雇员的月工资大于$1500，输出结果按月工资的合计升序排列<br><code>select job,sum(sal) from emp where job!=&#39;SALESMAN&#39; group by job having avg(sal)&gt;1500 order by sum(sal)</code></p>
 </li>
-<li><p>列出所有办事员(CLERK)的姓名,编号和部门编号<br><code>select ename,empno,deptno from emp where job = &#39;CLERK&#39;</code></p>
+<li><p>求出平均工资最高的部门名称<br><code>select dname from (select avg(sal) s,deptno from emp group by deptno order by avg(sal) desc) t1,dept t2 where rownum=1 and t1.deptno=t2.deptno</code></p>
 </li>
-<li><p>找出奖金高于薪金的员工信息<br><code>select * from emp where comm &gt; sal</code></p>
+<li><p>要求查询出比7654工资要高的全部雇员的信息<br><code>select * from emp where sal &gt;(select sal from emp where empno = 7654)</code></p>
 </li>
-<li><p>找出奖金高于薪金的60%的员工信息<br><code>select * from emp where comm &gt; (sal * 0.6)</code></p>
+<li><p>要求查询工资比7654高，与7788从事相同工作的全部雇员信息<br><code>select * from emp where sal &gt;(select sal from emp where empno = 7654) and job in(select job from emp where empno = 7788)</code></p>
 </li>
-<li><p>找出部门10中所有经理(MANAGER)和部门20中所有办事员(CLERK)的详细资料<br><code>select * from emp where job = &#39;MANAGER&#39; and deptno = 10 or job = &#39;CLERK&#39; and deptno = 20</code></p>
+<li><p>查询出工资最低的雇员姓名，工作，工资<br><code>select ename,job,sal from emp where sal=(select min(sal) from emp)</code></p>
 </li>
-<li><p>找出部门10中所有经理(MANAGER),部门20中的所有办事员(CLERK), 既不是经理又不是办事员但薪金大于或等于2000的所有员工的详细资料<br><code>select * from emp where (job = &#39;MANAGER&#39; and deptno = 10) or (job = &#39;CLERK&#39; and deptno = 20) or (job != &#39;MANAGER&#39; and job != &#39;CLERK&#39; and sal &gt;=2000)</code></p>
+<li><p>查询出各部门工资最低的雇员姓名，工作，工资<br><code>select ename,job,sal from emp t1, (select deptno,min(sal) minsal from emp group by deptno ) t2 where t1.deptno=t2.deptno and t1.sal=t2.minsal</code></p>
 </li>
-<li><p>找出员工可以获取到奖金的工作<br><code>select distinct job from emp where nvl(comm,0)&gt;0</code></p>
-</li>
-<li><p>找出不收取或收取奖金低于100的员工信息<br><code>select * from emp where nvl(comm,0)&lt;100</code></p>
-</li>
-<li><p>找出各月倒数第3天受雇的所有员工信息<br><code>select * from emp where last_day(hiredate)-hiredate=2;</code></p>
-</li>
-<li><p>找出早于12年前受雇的员工信息<br><code>select * from emp where to_number(to_char(sysdate,&#39;yyyy&#39;)) - to_number(to_char(hiredate,&#39;yyyy&#39;)) &gt; 12</code></p>
-</li>
-<li><p>以首字母大写的方式显示所有员工的姓名<br><code>select initcap(ename) from emp</code></p>
-</li>
-<li><p>显示正好为5个字符的员工的姓名<br><code>select ename from emp where ename like &#39;_____&#39;</code><br>或<br><code>select ename from emp where length(ename) = 5</code></p>
-</li>
-<li><p>显示不带有”R”的员工的姓名<br><code>select ename from emp where instr(ename,&#39;R&#39;) = 0</code></p>
-</li>
-<li><p>显示所有员工的姓名的前三个字符<br><code>select substr(ename,0,3) from emp</code></p>
-</li>
-<li><p>显示所有员工的姓名,用”a”代替所有的”A”<br><code>select replace(ename,&#39;A&#39;,&#39;a&#39;) from emp;</code></p>
-</li>
-<li><p>显示满10年服务年限的员工的姓名和受雇日期<br><code>select ename,hiredate from emp where to_number(to_char(sysdate,&#39;yyyy&#39;)) - to_number(to_char(hiredate,&#39;yyyy&#39;)) &gt; 10</code></p>
-</li>
-<li><p>显示员工详细信息,按姓名排升序<br><code>select * from emp order by ename</code></p>
-</li>
-<li><p>显示员工的姓名和受雇日期,根据其服务年限,将最老的员工排在前面<br><code>select ename,hiredate from emp order by hiredate</code></p>
-</li>
-<li><p>显示所有员工的姓名,工作和薪金,按工作的降序排序,若工作相同则薪金升序排序<br><code>select ename,job,sal from emp order by job desc,sal</code></p>
-</li>
-<li><p>示所有员工的姓名,加入公司的年份和月份,按受雇日期所在月排序,若月份相同则将最早年份的员工排在前面（要求使用extract函数）<br><code>select ename,extract (year from hiredate),extract (month from hiredate) from emp order by extract (month from hiredate),extract (year from hiredate)</code></p>
-</li>
-<li><p>显示在一个月为30天的情况,所有员工的名字和日薪金,忽略余数<br><code>select ename,trunc((sal/30)) from emp;</code></p>
-</li>
-<li><p>找出在(任何年份的)2月受雇的所有员工信息<br><code>select * from emp where extract(month from hiredate)=2</code></p>
-</li>
-<li><p>对于每个员工,显示名字和其加入公司的天数,保留2位小数(四舍五入)<br><code>select ename,round(sysdate-hiredate,2) from emp;</code></p>
-</li>
-<li><p>显示姓名字段的任何位置包含”A”的所有员工的姓名<br><code>select ename from emp where instr(ename,&#39;A&#39;) &gt; 0</code></p>
-</li>
+<li><p>要求查询出部门名称，部门的员工数，部门的平均工资，部门的最低收入雇员姓名，要求显示所有部门名，如果该部门没有任何员工，则员工书和平均工资需显示0，员工姓名显示null即可。</p>
+<pre><code class="hljs routeros">select dname,  nvl(empnum,0),nvl(avgsal,0), nvl(emp.ename,<span class="hljs-literal">null</span>)
+<span class="hljs-keyword">from</span> emp,dept t1, (select  deptno,avg (nvl(sal,0)) avgsal,min (sal) minsal,count (empno) empnum <span class="hljs-keyword">from</span> emp<span class="hljs-built_in"> group </span>by deptno ) t2
+where t1.deptno = t2.deptno(+) <span class="hljs-keyword">and</span> emp.sal(+) = t2.minsal</code></pre></li>
 </ol>
 
             </article>
@@ -275,18 +243,12 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/07/16/Oracle%E8%AF%95%E9%A2%983/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Oracle试题3</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/07/15/Oracle%E8%AF%95%E9%A2%981/">
-                        <span class="hidden-mobile">Oracle试题1</span>
+                      <a href="/2020/07/16/Oracle%E8%AF%95%E9%A2%983/">
+                        <span class="hidden-mobile">Oracle试题3</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -432,7 +394,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Oracle试题2&nbsp;",
+        "Oracle试题3&nbsp;",
       ],
       cursorChar: "|",
       typeSpeed: 80,
